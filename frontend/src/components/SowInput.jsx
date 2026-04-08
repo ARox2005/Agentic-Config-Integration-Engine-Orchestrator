@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react'
 import './SowInput.css'
 
+const MOCK_API_BASE = import.meta.env.VITE_MOCK_API_BASE || 'http://localhost:8004'
+
 const SAMPLE_SOW = `Integration SOW: KYC Provider
 
 Business Rule:
@@ -9,7 +11,7 @@ When a loan application is submitted, the system must verify the applicant's ide
 API Details:
 - Service Name: KYC Provider
 - Version: v1.0
-- Endpoint: http://localhost:8004/mock-kyc/verify
+- Endpoint: ${MOCK_API_BASE}/mock-kyc/verify
 - Method: POST
 - Expected Request Fields: full_name, date_of_birth, pan_number, aadhaar_last4
 - Expected Response Fields: status, kyc_verified, identity_score, name_match, verification_id
