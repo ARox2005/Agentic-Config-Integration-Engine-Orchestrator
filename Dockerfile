@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir uvicorn python-multipart python-dotenv
 RUN mkdir -p data
 
 # Copy the entire orchestrator source code
-COPY orchestrator/ /app/
+COPY . /app/
 
 # Expose port 7860 as required by Hugging Face Spaces
 EXPOSE 7860
