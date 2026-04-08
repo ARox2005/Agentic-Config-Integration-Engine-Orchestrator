@@ -1,0 +1,68 @@
+.audit-panel {
+  background: #1a1a2e;
+  border: 1px solid #2d2d44;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.audit-panel h3 {
+  margin: 0 0 12px 0;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.audit-empty {
+  color: #666;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.audit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.audit-event {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #16162a;
+  border-radius: 6px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.audit-icon {
+  flex-shrink: 0;
+}
+
+.audit-action {
+  color: #c0c0ff;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.audit-tenant {
+  color: #80cbc4;
+  font-size: 12px;
+  background: #1a2e2e;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.audit-detail {
+  color: #999;
+  font-size: 12px;
+}
+
+.audit-time {
+  margin-left: auto;
+  color: #666;
+  font-size: 11px;
+  font-family: monospace;
+}

@@ -1,0 +1,156 @@
+.blueprint-preview {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.model-badge {
+    font-size: 11px;
+    color: #888;
+    background: #12121f;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.preview-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.tab {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #12121f;
+    border: 1px solid #2a2a4a;
+    border-radius: 6px;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab.active {
+    background: #1e3a5f;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+.tab:hover:not(.active) {
+    color: #ccc;
+}
+
+.json-editor {
+    width: 100%;
+    background: #0a0a14;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    color: #8be9fd;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 14px;
+    resize: vertical;
+    outline: none;
+    line-height: 1.5;
+}
+
+.json-editor:focus {
+    border-color: #3b82f6;
+}
+
+.json-error {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #2d1214;
+    border-radius: 6px;
+    color: #ef4444;
+    font-size: 12px;
+}
+
+.preview-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+}
+
+.btn-deploy {
+    background: #16a34a;
+    color: #fff;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.btn-deploy:hover:not(:disabled) {
+    background: #15803d;
+}
+
+.btn-simulate {
+    background: #7c3aed;
+    color: #fff;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.btn-simulate:hover:not(:disabled) {
+    background: #6d28d9;
+}
+
+/* ── Discovery Banner ── */
+
+.discovery-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.discovery-banner.existing {
+    background: #1a2a1e;
+    border: 1px solid #22c55e;
+}
+
+.discovery-banner.new {
+    background: #1a1a2e;
+    border: 1px solid #3b82f6;
+}
+
+.discovery-icon {
+    font-size: 16px;
+}
+
+.discovery-text {
+    color: #ddd;
+}
+
+.confidence-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #22c55e;
+    background: #14532d;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: 6px;
+}
+
+.discovery-reason {
+    width: 100%;
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+}
+
+.discovery-checked {
+    font-size: 10px;
+    color: #555;
+    margin-left: auto;
+}
