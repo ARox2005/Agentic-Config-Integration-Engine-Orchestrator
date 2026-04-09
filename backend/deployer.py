@@ -1,6 +1,8 @@
 import json
 import re
 import shutil
+import httpx
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -102,53 +104,29 @@ def deploy_config(
             "path": None,
         }
 
-    # Tenant-isolated directory
-    tenant_configs_dir = MIDDLEWARE_CONFIGS_DIR / tenant_id
-
-    # Ensure configs directory exists
+    # Dynamically extract the URL of the Hugging Face Middleware Space
+    middleware_url = os.getenv("MIDDLEWARE_API_URL", "http://localhost:8002/api/gateway")
+    deploy_endpoint = f"{middleware_url}/deploy/{safe_name}?tenant_id={tenant_id}"
+    
     try:
-        tenant_configs_dir.mkdir(parents=True, exist_ok=True)
-    except PermissionError:
+        # Fire the JSON blueprint over the network
+        response = httpx.post(deploy_endpoint, json=blueprint, timeout=10.0)
+        response.raise_for_status()
+        resp_data = response.json()
+        
         return {
-            "success": False,
-            "status": "error",
-            "message": f"Permission denied: cannot create directory {tenant_configs_dir}",
-            "path": None,
+            "success": True,
+            "status": "created_or_updated",
+            "message": resp_data.get("message", "Deployed successfully"),
+            "path": resp_data.get("path"),
         }
-
-    config_path = tenant_configs_dir / f"{safe_name}.json"
-    is_update = config_path.exists()
-
-    # Backup existing config if present
-    if is_update and backup_existing:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_path = config_path.with_suffix(f".{timestamp}.bak")
-        try:
-            shutil.copy2(config_path, backup_path)
-            print(f"[DEPLOYER] Backed up existing config to {backup_path.name}")
-        except Exception as e:
-            print(f"[DEPLOYER] Warning: Could not backup existing config: {e}")
-
-    # Write the config file
-    try:
-        with open(config_path, "w", encoding="utf-8") as f:
-            json.dump(blueprint, f, indent=2, ensure_ascii=False)
     except Exception as e:
         return {
             "success": False,
             "status": "error",
-            "message": f"Failed to write config file: {str(e)}",
+            "message": f"Network deploy failed: {str(e)}",
             "path": None,
         }
-
-    action = "updated" if is_update else "created"
-
-    return {
-        "success": True,
-        "status": action,
-        "message": f"Config '{tenant_id}/{safe_name}.json' {action} successfully.",
-        "path": str(config_path),
-    }
 
 # ──────────────────────────────────────────────
 # Split Deployment (Config + Registry)

@@ -1,4 +1,6 @@
 from pathlib import Path
+import httpx
+import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -324,33 +326,25 @@ async def generate_from_upload(
 
 @app.post("/api/orchestrator/reset-configs")
 async def reset_configs(tenant_id: Optional[str] = None):
-    """Demo utility: Deletes deployed config files from middleware/configs/."""
-    configs_dir = Path(__file__).parent.parent.parent / "middleware" / "configs"
-    deleted = []
-
+    """Demo utility: Remotely deletes deployed config files from the middleware container."""
+    middleware_url = os.getenv("MIDDLEWARE_API_URL", "http://localhost:8002/api/gateway")
+    
+    endpoint = f"{middleware_url}/configs"
     if tenant_id:
-        # Reset specific tenant
-        tenant_dir = configs_dir / tenant_id
-        if tenant_dir.exists():
-            for config_file in tenant_dir.glob("*.json"):
-                config_file.unlink()
-                deleted.append(f"{tenant_id}/{config_file.name}")
-    else:
-        # Reset all configs (flat + tenant dirs)
-        if configs_dir.exists():
-            for config_file in configs_dir.glob("*.json"):
-                config_file.unlink()
-                deleted.append(config_file.name)
-            for tenant_dir in configs_dir.iterdir():
-                if tenant_dir.is_dir():
-                    for config_file in tenant_dir.glob("*.json"):
-                        config_file.unlink()
-                        deleted.append(f"{tenant_dir.name}/{config_file.name}")
-
-    log_event("configs_reset", {"tenant_id": tenant_id or "all", "deleted": deleted})
-
-    return {
-        "status": "configs_cleared",
-        "deleted": deleted,
-        "count": len(deleted),
-    }
+        endpoint += f"?tenant_id={tenant_id}"
+        
+    try:
+        response = httpx.delete(endpoint, timeout=10.0)
+        response.raise_for_status()
+        data = response.json()
+        
+        deleted = data.get("deleted", [])
+        log_event("configs_reset", {"tenant_id": tenant_id or "all", "deleted": deleted})
+        
+        return {
+            "status": "configs_cleared",
+            "deleted": deleted,
+            "count": len(deleted),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to reset remote configs: {str(e)}")
