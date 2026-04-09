@@ -13,23 +13,52 @@ An enterprise-grade **design-time AI tool** that reads SOW (Statement of Work) d
 
 The core AI-engine of FinSpark. It takes SOW documents, performs autonomous adapter discovery using ChromaDB, and generates deployment blueprints using LangChain agentic flows and Pydantic validation schemas. Contains both the FastAPI Backend and the Vite/React Design-time UI.
 
-## Architecture
+---
 
+## 🚀 Live Demos
+
+Experience the FinSpark ecosystem instantly via our live deployed frontends:
+- **AI Orchestrator (Design-time UI)**: [Orchestrator Live App](https://agentic-config-integration-engine-o.vercel.app)
+- **Main App (End-User Demo)**: [Main App Live](https://agentic-config-integration-engine-m.vercel.app)
+
+*(Note: The Backend APIs, Middleware, and Mock APIs run as hidden background services and are accessed internally by these frontends).*
+
+---
+
+## Full Ecosystem Architecture
+
+The AI Orchestrator is the design-time intelligence engine within the larger FinSpark ecosystem. It acts as the brain that configures the runtime middleware.
+
+```text
+    ┌───────────────────────────┐
+    │       End User Apps       │      ┌───────────────────────────┐
+    │     (Main App: 5173)      │      │  Integration Engineers    │
+    └─────────────┬─────────────┘      │  (Orchestrator UI: 5174)  │
+                  │                    └─────────────┬─────────────┘
+                  ▼                                  ▼
+    ┌───────────────────────────┐      ┌───────────────────────────┐
+    │    Middleware Gateway     │◄─────┤  AI Orchestrator Backend  │
+    │     (Runtime: 8002)       │      │  (Design-time API: 8003)  │
+    └─────────────┬─────────────┘      └─────────────┬─────────────┘
+                  │                                  │
+                  ▼                                  ▼
+    ┌───────────────────────────┐      ┌───────────────────────────┐
+    │      External APIs        │◄─────┤       LLM Provider        │
+    │  (Mock Providers: 8004)   │ sim. │(Ollama, Gemini, NVIDIA)   │
+    └───────────────────────────┘      └───────────────────────────┘
 ```
-                                ▲
-                                │ deploys configs to
-                                │ /middleware/configs/{tenant_id}/
-                                │
-                        ┌───────────────────────────┐
-                        │      AI Orchestrator      │
-                        │ Backend: 8003             │
-                        │ Frontend: 5174            │
-                        │ (FastAPI + LangChain +    │
-                        │ ChromaDB RAG + Any LLM)   │
-                        └───────────────────────────┘
-```
-**Role**: The product — uploads SOW, uses ChromaDB RAG for discovery, generates configs via LangChain, simulates, and deploys.
-**Tech**: React + FastAPI + LangChain + ChromaDB.
+
+### Components & Repositories
+
+Use the table below to track the GitHub repositories for the FinSpark ecosystem.
+
+| Component | Description | GitHub Repository Link |
+|-----------|-------------|------------------------|
+| **Middleware Gateway** | Runtime API gateway that isolates tenant traffic | [Middleware Repo](https://github.com/ARox2005/Agentic-Config-Integration-Engine-Middleware.git) |
+| **Main App (Frontend Demo)**| Mock banking portal to test tenant configurations | [Main App Repo](https://github.com/ARox2005/Agentic-Config-Integration-Engine-Main-App.git) |
+| **Mock APIs** | Simulated third-party providers (KYC, GST, etc.) | [Mock APIs Repo](https://github.com/ARox2005/Agentic-Config-Integration-Engine-mock-api-.git) |
+
+**Orchestrator Tech Stack**: React + FastAPI + LangChain + ChromaDB + Multi-LLM Support.
 
 ## Key Features
 
