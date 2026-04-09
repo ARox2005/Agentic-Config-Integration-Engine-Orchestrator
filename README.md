@@ -94,39 +94,66 @@ Use the table below to track the GitHub repositories for the FinSpark ecosystem.
 - **An LLM Backend**: Choose either an **API Key** (OpenAI / NVIDIA NIM) OR a local **Ollama** installation.
 - **LangSmith API Key** (optional but highly recommended for tracing)
 
-## Setup & Quick Start
+## Local Setup & Quick Start (Full Ecosystem)
 
-Create a `.env` file in the `backend` or project root:
+To run the entire FinSpark pipeline locally, you will need to open **5 separate terminal tabs** and start each service in this workflow.
+
+> **Tip**: Since this is a monorepo structure, ensure you run these commands from within their respective root folders.
+
+### 1. Mock APIs (Port 8004)
+Provides simulated external endpoints (KYC, GST, etc.) for testing configurations during design-time.
+1. `cd mock-apis`
+2. `python -m venv .venv` and activate it (e.g., `.venv\Scripts\activate` on Windows)
+3. `pip install -r requirements.txt`
+4. `uvicorn src.main:app --reload --port 8004`
+
+### 2. Middleware Gateway (Port 8002)
+The runtime engine that intercepts requests from the Main App, validates them, and routes them to mock/real APIs based on tenant configs.
+1. `cd middleware`
+2. `python -m venv .venv` and activate it
+3. `pip install -r requirements.txt`
+4. `uvicorn src.main:app --reload --port 8002`
+
+### 3. AI Orchestrator Backend (Port 8003)
+The design-time AI engine. **Requires an LLM `.env` file first.**
+
+Create a `.env` file inside the `orchestrator/` folder:
 ```env
-# LLM Configuration - Choose ONE option based on your backend
-# Option A: Cloud API (OpenAI, NVIDIA NIM, etc.)
-OPENAI_API_KEY="your_api_key_here"  
-NVIDIA_API_KEY="your_nvidia_key_here"
+# LLM Configuration - Depending on your backend, configure one of the following:
 
-# Option B: Local Models (Ollama)
+# Option A: NVIDIA API (Cloud)
+NVIDIA_API_KEY="your_nvidia_key_here"
+NVIDIA_MODEL="google/gemma-3n-e4b-it"
+
+# Option B: Ollama (Local)
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=llama3.2:latest
+OLLAMA_API_KEY="" # Usually empty for local deployment
 
-# LangSmith Configuration (MLOps)
+# (Optional) LangSmith MLOps Tracking
 LANGCHAIN_TRACING_V2=true
 LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
 LANGCHAIN_API_KEY="your_langsmith_key_here"
 LANGCHAIN_PROJECT="FinSpark_Orchestrator_v2"
 ```
 
-### Backend Setup
-1. Create virtual env: `python -m venv venv`
-2. Activate the virtual environment
-3. Install dependencies: `pip install -r requirements.txt`
+1. `cd orchestrator`
+2. `python -m venv .venv` and activate it
+3. `pip install -r requirements.txt`
 4. Verify backend: `curl http://localhost:8003/health`
-5. Run: `uvicorn backend.main:app --reload --port 8003`
+5. `uvicorn backend.main:app --reload --port 8003`
 
-### Frontend Setup
-1. `cd frontend`
+### 4. AI Orchestrator Frontend (Port 5174)
+The React dashboard for uploading SOWs and generating configurations.
+1. `cd orchestrator/frontend`
 2. `npm install`
-3. Configure your Vite environment variables to point to the backend and middleware.
-4. `npm run dev`
-5. Opens at: **http://localhost:5174**
+3. `npm run dev` (Check that it opens on **http://localhost:5174**)
+
+### 5. FinSpark Main App (Port 5173)
+The end-user banking demo application that tests the runtime tenant integrations.
+1. `cd main-app`
+2. `npm install`
+3. `npm run dev` (Check that it opens on **http://localhost:5173**)
 
 ## Demo Walkthrough
 
