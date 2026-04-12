@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('FinSpark Orchestrator Workflow', () => {
 
-  test('Orchestrator UI loads successfully', async ({ page }) => {
+  test('[C46] Orchestrator UI loads successfully', async ({ page }) => {
     // Navigate to the Orchestrator Frontend (it uses the baseURL we set earlier)
     await page.goto('/');
 
