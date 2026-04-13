@@ -1,6 +1,6 @@
 .smart-route {
-    background: #1a1a2e;
-    border: 1px solid #2a2a4a;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-primary);
     border-radius: 10px;
     padding: 16px;
 }
@@ -19,7 +19,7 @@
 .sr-label {
     font-size: 13px;
     font-weight: 600;
-    color: #aaa;
+    color: var(--text-secondary);
     display: block;
     margin-bottom: 6px;
 }
@@ -31,10 +31,10 @@
 
 .sr-textarea {
     width: 100%;
-    background: #12121f;
-    border: 1px solid #2a2a4a;
+    background: var(--bg-surface-deep);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
-    color: #8be9fd;
+    color: var(--code-text);
     font-family: 'Courier New', monospace;
     font-size: 12px;
     padding: 12px;
@@ -44,26 +44,26 @@
 }
 
 .sr-textarea:focus {
-    border-color: #3b82f6;
+    border-color: var(--accent-blue);
 }
 
 .sr-input {
     width: 100%;
-    background: #12121f;
-    border: 1px solid #2a2a4a;
+    background: var(--bg-surface-deep);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
-    color: #d0d0e0;
+    color: var(--text-primary);
     font-size: 13px;
     padding: 10px 12px;
     outline: none;
 }
 
 .sr-input:focus {
-    border-color: #3b82f6;
+    border-color: var(--accent-blue);
 }
 
 .sr-input::placeholder {
-    color: #555;
+    color: var(--text-faint);
 }
 
 /* Footer */
@@ -80,12 +80,12 @@
     align-items: center;
     gap: 6px;
     font-size: 12px;
-    color: #888;
+    color: var(--text-secondary);
     cursor: pointer;
 }
 
 .sr-toggle input {
-    accent-color: #3b82f6;
+    accent-color: var(--accent-blue);
 }
 
 /* Results */
@@ -105,13 +105,13 @@
 
 .sr-status.routed,
 .sr-status.executed {
-    background: #14532d;
-    color: #22c55e;
+    background: var(--accent-green-bg);
+    color: var(--accent-green);
 }
 
 .sr-status.no_match {
-    background: #450a0a;
-    color: #ef4444;
+    background: var(--accent-red-bg);
+    color: var(--accent-red);
 }
 
 /* Adapter cards */
@@ -123,8 +123,8 @@
 }
 
 .sr-adapter-card {
-    background: #12121f;
-    border: 1px solid #2a2a4a;
+    background: var(--bg-surface-deep);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
     padding: 12px;
 }
@@ -132,7 +132,7 @@
 .sr-adapter-name {
     font-size: 14px;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-heading);
     margin-bottom: 6px;
 }
 
@@ -146,13 +146,13 @@
 .sr-adapter-confidence span {
     font-size: 11px;
     font-weight: 700;
-    color: #3b82f6;
+    color: var(--accent-blue);
     min-width: 32px;
 }
 
 .confidence-bar {
     height: 6px;
-    background: #3b82f6;
+    background: var(--accent-blue);
     border-radius: 3px;
     max-width: 200px;
     transition: width 0.3s;
@@ -160,15 +160,15 @@
 
 .sr-adapter-reason {
     font-size: 12px;
-    color: #888;
+    color: var(--text-secondary);
     line-height: 1.4;
 }
 
 .sr-no-match {
     font-size: 13px;
-    color: #ef4444;
+    color: var(--accent-red);
     padding: 12px;
-    background: #1a0a0a;
+    background: var(--accent-red-bg);
     border-radius: 8px;
 }
 
@@ -176,15 +176,15 @@
 
 .sr-execution {
     margin-top: 12px;
-    background: #12121f;
-    border: 1px solid #1e3a5f;
+    background: var(--bg-surface-deep);
+    border: 1px solid var(--accent-blue-bg);
     border-radius: 8px;
     padding: 12px;
 }
 
 .sr-exec-header {
     font-size: 12px;
-    color: #aaa;
+    color: var(--text-secondary);
     margin-bottom: 8px;
     display: flex;
     align-items: center;
@@ -194,7 +194,7 @@
 .sr-exec-data {
     font-family: 'Courier New', monospace;
     font-size: 11px;
-    color: #a0a0c0;
+    color: var(--code-text-alt);
     white-space: pre-wrap;
     word-break: break-word;
     margin: 0;

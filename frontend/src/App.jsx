@@ -9,6 +9,7 @@ import './App.css'
 const API_BASE = import.meta.env.VITE_ORCHESTRATOR_API_BASE || 'http://localhost:8003/api/orchestrator'
 const MIDDLEWARE_BASE = import.meta.env.VITE_MIDDLEWARE_API_BASE || 'http://localhost:8002/api/gateway'
 const HEALTH_URL = import.meta.env.VITE_ORCHESTRATOR_HEALTH_URL || 'http://localhost:8003/health/ollama'
+const MAIN_APP_URL = import.meta.env.VITE_MAIN_APP_URL || 'http://localhost:5173'
 
 // Sample payloads for simulation (same as main-app)
 const SAMPLE_PAYLOADS = {
@@ -37,6 +38,17 @@ const TENANTS = [
 ]
 
 function App() {
+  // Theme
+  const [theme, setTheme] = useState(() => localStorage.getItem('orch-theme') || 'dark')
+  const [showInstructions, setShowInstructions] = useState(false)
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : '')
+    localStorage.setItem('orch-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark')
+
   // Workflow state: "input" | "preview" | "simulate" | "deployed"
   const [step, setStep] = useState('input')
   const [showAudit, setShowAudit] = useState(false)
@@ -255,11 +267,38 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1 className="app-title">ZeroOne AI Orchestrator</h1>
-        <p className="app-subtitle">
-          Upload SOW → Generate → Simulate → Deploy
-        </p>
-        <StatusBar ollamaStatus={ollamaStatus} registryCount={registryCount} />
+        <div className="header-left">
+          <h1 className="app-title">ZeroOne AI Orchestrator</h1>
+          <p className="app-subtitle">
+            Upload SOW → Generate → Simulate → Deploy
+          </p>
+          <StatusBar ollamaStatus={ollamaStatus} registryCount={registryCount} />
+        </div>
+        <div className="header-actions">
+          <a
+            href={MAIN_APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="main-app-link"
+            title="Open Main App"
+          >
+            Main App ↗
+          </a>
+          <button
+            className="help-btn"
+            onClick={() => setShowInstructions(true)}
+            title="How to use"
+          >
+            ?
+          </button>
+          <button
+            className="theme-toggle-btn"
+            onClick={toggleTheme}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
+        </div>
       </header>
 
       {/* Tenant Selector + Audit Toggle */}
@@ -376,6 +415,45 @@ function App() {
           </button>
         </div>
       )}
+
+      {/* Instructions Modal */}
+      {showInstructions && (
+        <div className="modal-overlay" onClick={() => setShowInstructions(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowInstructions(false)}>✕</button>
+            <h2>How to Use the Orchestrator</h2>
+            <h3>Step 1 — Input</h3>
+            <ol>
+              <li>Select a <strong>Tenant</strong> from the toolbar dropdown.</li>
+              <li>Paste an SOW document into the text area, or drag-and-drop files into the upload zone.</li>
+              <li>Click <strong>Generate</strong> to produce a blueprint.</li>
+            </ol>
+            <h3>Step 2 — Preview</h3>
+            <ol>
+              <li>Review the generated <strong>Blueprint</strong> and <strong>Catalog Entry</strong> JSON.</li>
+              <li>You can edit the JSON directly in the editor.</li>
+              <li>Click <strong>Simulate</strong> to test the integration.</li>
+            </ol>
+            <h3>Step 3 — Simulate</h3>
+            <ol>
+              <li>Review the step-by-step simulation output.</li>
+              <li>Check the HTTP status code and response data.</li>
+              <li>If satisfied, click <strong>Deploy</strong>.</li>
+            </ol>
+            <h3>Step 4 — Deploy</h3>
+            <p>
+              The blueprint is saved to the middleware config directory and registered in the catalog.
+              Click <strong>New Integration</strong> to start over.
+            </p>
+            <h3>Other Features</h3>
+            <ol>
+              <li><strong>Audit Trail</strong> — Click "Show Audit Trail" in the toolbar to view all past actions.</li>
+              <li><strong>Theme</strong> — Use the ☀️/🌙 button to toggle between dark and light mode.</li>
+            </ol>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

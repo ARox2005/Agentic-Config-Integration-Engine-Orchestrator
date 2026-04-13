@@ -11,19 +11,19 @@
     font-weight: 600;
     padding: 4px 10px;
     border-radius: 12px;
-    background: #1a1a2e;
+    background: var(--bg-surface);
 }
 
 .status-chip.ok {
-    color: #22c55e;
+    color: var(--accent-green);
 }
 
 .status-chip.error {
-    color: #ef4444;
+    color: var(--accent-red);
 }
 
 .status-chip.neutral {
-    color: #888;
+    color: var(--text-secondary);
 }
 
 .status-dot {
