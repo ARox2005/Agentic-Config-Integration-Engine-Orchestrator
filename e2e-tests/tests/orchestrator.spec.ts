@@ -18,4 +18,43 @@ test.describe('FinSpark Orchestrator Workflow', () => {
     await expect(generateBtn).toBeVisible();
   });
 
+  test('[C47] Theme toggle button is visible', async ({ page }) => {
+    await page.goto('/');
+    const themeBtn = page.locator('.theme-toggle-btn');
+    await expect(themeBtn).toBeVisible();
+  })
+
+  test('[C48] Theme switches to light mode', async ({ page }) => {
+    await page.goto('/');
+    const themeBtn = page.locator('.theme-toggle-btn');
+    await themeBtn.click();
+    const dataTheme = await page.locator('html').getAttribute('data-theme');
+    expect(dataTheme).toBe('light');
+  })
+
+  test('[C49] Help button opens instructions modal', async ({ page }) => {
+    await page.goto('/');
+    const helpBtn = page.locator('.help-btn');
+    await helpBtn.click();
+
+    const modal = page.locator('.modal-overlay');
+    await expect(modal).toBeVisible();
+
+    const modalTitle = page.locator('.modal-content h2');
+    await expect(modalTitle).toHaveText('How to Use the Orchestrator');
+  })
+
+  test('[C50] Instructions modal can be closed', async ({ page }) => {
+    await page.goto('/');
+    const helpBtn = page.locator('.help-btn');
+    await helpBtn.click();
+
+    const modal = page.locator('.modal-overlay');
+    await expect(modal).toBeVisible();
+
+    const modalClose = page.locator('.modal-close')
+    await modalClose.click();
+
+    await expect(modal).not.toBeVisible();
+  })
 });
